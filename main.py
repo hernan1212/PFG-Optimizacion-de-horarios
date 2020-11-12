@@ -1,16 +1,32 @@
-# This is a sample Python script.
+#!/usr/bin/python3
 
-# Press Mayús+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# from math import *
+# from sklearn import tree
+# import matplotlib.pyplot as plt
+from LD.tipoRest import varP
+from GestorProblema import GestorProblema as gp
+from csvReader import csvReader
+from LD.Problem import Problem
 
+nameProblem = "Intento 1"
+nameAlgorithm = "Basic"
+nameRestricciones = "Normal"
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+prob = Problem()
+c = csvReader()
 
+Alumnos = c.readstudents("data/alumnos.csv")
+Profesores = c.readprofessors("data/profesores.csv")
+Asignaturas = c.readsubjects("data/asignaturas.csv")
+Aulas = c.readaulas("data/aulas.csv")
+Restricciones = c.readrestricciones("data/restricciones.csv")
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+prob.students = Alumnos
+prob.professors = Profesores
+prob.subjects = Asignaturas
+prob.rooms = Aulas
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+gp.optimize(prob, Restricciones)
+
+# prob.states.print_result()
+
