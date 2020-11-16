@@ -3,8 +3,7 @@
 # from math import *
 # from sklearn import tree
 # import matplotlib.pyplot as plt
-from LD.tipoRest import varP
-from GestorProblema import GestorProblema as gp
+from GestorProblema import GestorProblema
 from csvReader import csvReader
 from LD.Problem import Problem
 
@@ -26,7 +25,6 @@ prob.professors = Profesores
 prob.subjects = Asignaturas
 prob.rooms = Aulas
 
-gp.optimize(prob, Restricciones)
+GestorProblema.optimize(prob, Restricciones)
 
-# prob.states.print_result()
-
+prob.result.print_result()
