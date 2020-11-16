@@ -8,6 +8,7 @@ from LD.tipoRest import *
 
 
 class csvReader:
+
     def readstudents(self, txt):
         dfAlumnos = pd.read_csv(txt)
         alumnos = list()
@@ -62,4 +63,3 @@ class csvReader:
             restricciones.append(r)
             restricciones[i].print_information()
         return restricciones
-

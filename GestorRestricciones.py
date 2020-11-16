@@ -1,9 +1,14 @@
+from LD.Relacion import Relacion
+
+
 class GestorRestricciones:
 
     def __init__(self, rest):
         self.constraints = rest
+        self.basic_const = self._set_constraints(3)
         self.soft_const = self._set_constraints(2)
         self.hard_const = self._set_constraints(1)
+        self._set_basic_param()
 
     def evaluate_hard(self, estados):
         for e in estados:
@@ -14,6 +19,8 @@ class GestorRestricciones:
 
     def evaluate_soft(self, estados):
         for e in estados:
+            for r in self.soft_const:
+                ...
             e.getevaluation()
         return estados
 
@@ -24,3 +31,6 @@ class GestorRestricciones:
                 list1.append(i)
         return list1
 
+    def _set_basic_param(self):
+        for i in self.basic_const:
+            exec(" ".join(i.cont_b))
