@@ -4,7 +4,6 @@ from OptimizadorAlgoritmo import OptimizadorAlgoritmo
 class Problem:
 
     def __init__(self):
-        self.restricciones = ""
         self.name = ""
 
     def __str__(self):

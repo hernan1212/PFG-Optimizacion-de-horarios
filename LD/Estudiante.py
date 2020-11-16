@@ -9,3 +9,6 @@ class Estudiante(Persona):
 
     def print_information(self):
         print("Nombre: " + self.nombre + ", Apellido: " + self.apellido + ", Asignaturas: " + ','.join(self.clases))
+
+    def __repr__(self):
+        return self.nombre

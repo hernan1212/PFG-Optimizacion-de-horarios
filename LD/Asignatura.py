@@ -5,3 +5,6 @@ class Asignatura:
 
     def print_information(self):
         print("Nombre: " + self.nombre)
+
+    def __repr__(self):
+        return self.nombre
