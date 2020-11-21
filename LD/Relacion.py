@@ -20,3 +20,6 @@ class Relacion:
 
     def key(self, var1, var2):
         return str(attrgetter(var1)) + str(attrgetter(var2))
+
+    def get_var(self, var):
+        return attrgetter(var)

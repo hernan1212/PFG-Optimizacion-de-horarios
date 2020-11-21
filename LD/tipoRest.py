@@ -2,15 +2,15 @@ import enum
 
 
 class tipoRest(enum.Enum):
-    soft = 1
-    hard = 2
+    hard = 1
+    soft = 2
     basic = 3
 
     def what_tipo(tipo):
         if tipo == 1:
-            return tipoRest.soft
-        elif tipo == 2:
             return tipoRest.hard
+        elif tipo == 2:
+            return tipoRest.soft
         return tipoRest.basic
 
 
@@ -32,8 +32,10 @@ class varP(enum.Enum):
     enumHora = "Hora"
     enumAlumno = "Alumno"
     enumAula = "Aula"
-    enumAsignatura = "Asignatura"
+    enumAsignatura = "asignatura.nombre"
     enumMaxAula = "MaxAula"
+    enumProfAptitudes = "profesor.aptitudes"
+    enumAlumAptitudes = "estudiante.clases"
     enumHoraMax = "Relacion.HoraMax"
     enumDiaMax = "Relacion.DiaMax"
 
@@ -46,10 +48,14 @@ class varP(enum.Enum):
             return varP.enumAlumno
         elif tipo == "Aula":
             return varP.enumAula
-        elif tipo == "Asignatura":
+        elif tipo == "asignatura.nombre":
             return varP.enumAsignatura
         elif tipo == "HoraMax":
             return varP.enumHoraMax
         elif tipo == "DiaMax":
             return varP.enumDiaMax
+        elif tipo == "estudiante.clases":
+            return varP.enumAlumAptitudes
+        elif tipo == "profesor.aptitudes":
+            return varP.enumProfAptitudes
         return varP.enumMaxAula
