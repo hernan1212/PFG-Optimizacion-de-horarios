@@ -28,28 +28,34 @@ class importRest(enum.Enum):
 
 
 class varP(enum.Enum):
-    enumProfesor = "Profesor"
-    enumHora = "Hora"
-    enumAlumno = "Alumno"
-    enumAula = "Aula"
-    enumAsignatura = "asignatura.nombre"
+    enumProfesor = "profesor"
+    enumHora = "hora"
+    enumAlumno = "estudiante"
+    enumAula = "aula"
+    enumAsignatura = "asignatura"
+    enumAsigNombre = "asignatura.nombre"
     enumMaxAula = "MaxAula"
+    enumAsigClases = "asignatura.numClases"
     enumProfAptitudes = "profesor.aptitudes"
     enumAlumAptitudes = "estudiante.clases"
     enumHoraMax = "Relacion.HoraMax"
     enumDiaMax = "Relacion.DiaMax"
 
     def what_var(tipo):
-        if tipo == "Profesor":
+        if tipo == "profesor":
             return varP.enumProfesor
-        elif tipo == "Hora":
+        elif tipo == "hora":
             return varP.enumHora
-        elif tipo == "Alumno":
+        elif tipo == "estudiante":
             return varP.enumAlumno
-        elif tipo == "Aula":
+        elif tipo == "aula":
             return varP.enumAula
-        elif tipo == "asignatura.nombre":
+        elif tipo == "asignatura":
             return varP.enumAsignatura
+        elif tipo == "asignatura.nombre":
+            return varP.enumAsigNombre
+        elif tipo == "asignatura.numClases":
+            return varP.enumAsigClases
         elif tipo == "HoraMax":
             return varP.enumHoraMax
         elif tipo == "DiaMax":
@@ -58,4 +64,6 @@ class varP(enum.Enum):
             return varP.enumAlumAptitudes
         elif tipo == "profesor.aptitudes":
             return varP.enumProfAptitudes
-        return varP.enumMaxAula
+        elif tipo == "MaxAula":
+            return varP.enumMaxAula
+        return tipo

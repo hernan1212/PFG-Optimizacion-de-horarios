@@ -66,11 +66,19 @@ class Problem:
     def rooms(self, rooms):
         self._rooms = rooms
 
+    @property
+    def horas(self):
+        return self._horas
+
+    @horas.setter
+    def horas(self, horas):
+        self._horas = horas
+
     def set_restricciones(self, restricciones):
         pass
 
     def optimize(self):
-        self._states = self.strategy.start_states(self._students, self._professors, self._subjects, self._rooms)
+        self._states = self.strategy.start_states(self._students, self._professors, self._subjects, self._rooms, self._horas)
         return self.strategy.optimizar(self._states)
 
 
