@@ -7,8 +7,7 @@ from GestorProblema import GestorProblema
 from csvReader import csvReader
 from LD.Problem import Problem
 
-nameProblem = "Intento 1"
-nameAlgorithm = "Basic"
+nameProblem = "Basic"
 nameRestricciones = "Normal"
 
 prob = Problem()

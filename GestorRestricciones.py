@@ -12,16 +12,16 @@ class GestorRestricciones:
 
     def evaluate_hard(self, estados):
         for e in estados:
+            e.evalHard = 0
             for r in self.hard_const:
-                ...
-            e.getevaluation()
+                e.comprobH(r)
+        estados.sort(reverse=True, key=lambda x: x.evalHard)
         return estados
 
     def evaluate_soft(self, estados):
         for e in estados:
             for r in self.soft_const:
-                ...
-            e.getevaluation()
+                e.comprobS(r)
         return estados
 
     def _set_constraints(self, cont):
