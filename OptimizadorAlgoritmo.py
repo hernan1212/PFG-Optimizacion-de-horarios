@@ -8,7 +8,7 @@ class OptimizadorAlgoritmo(ABC):
         pass
 
     @abstractmethod
-    def start_states(self, alumnos, profesores, asignaturas, aulas):
+    def start_states(self, alumnos, profesores, asignaturas, aulas, horas):
         pass
 
     @abstractmethod

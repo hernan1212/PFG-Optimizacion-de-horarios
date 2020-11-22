@@ -31,7 +31,8 @@ class csvReader:
         dfAsignaturas = pd.read_csv(txt)
         asignaturas = list()
         for i in range(0, len(dfAsignaturas)):
-            a = Asignatura(dfAsignaturas.iloc[i, 0])
+            a = Asignatura(dfAsignaturas.iloc[i, 0], dfAsignaturas.iloc[i, 1])
+
             asignaturas.append(a)
             asignaturas[i].print_information()
         return asignaturas
@@ -55,10 +56,7 @@ class csvReader:
             contb = dfRest.iloc[i, 3].split(' ')
             cont = []
             for j in range(0, len(contb)):
-                if(j % 2 == 0) & (type(contb) != 'int'):
-                    cont.append(varP.what_var(contb[j]))
-                else:
-                    cont.append(contb[j])
+                cont.append(varP.what_var(contb[j]))
             r = Restriccion(nombre, tipo, imp, cont, contb)
             restricciones.append(r)
             restricciones[i].print_information()
