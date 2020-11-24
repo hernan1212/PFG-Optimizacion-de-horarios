@@ -8,13 +8,15 @@ from OptimizadorAlgoritmo import OptimizadorAlgoritmo
 
 def print_estados(estados):
     for x in range(len(estados)):
-        print("Estado" + str(x) + ": " + str(estados[x].evalHard))
+        print("Estado" + str(x) + ": " + str(sum(estados[x].evalHard)))
 
 
 class AlgEjemplo(OptimizadorAlgoritmo, ABC):
-    indiv = 100
+    indiv = 200
     crom = 0
-    generations = 5
+    generations = 40
+    comprobacionH = False
+    comprobacionF = False
 
     def __init__(self, rest):
         super().__init__(rest)
@@ -36,6 +38,7 @@ class AlgEjemplo(OptimizadorAlgoritmo, ABC):
         estados = []
         for i in alumnos:
             AlgEjemplo.crom += len(i.clases)
+        self.gr.set_evaluations(AlgEjemplo.crom)
         for i in range(0, AlgEjemplo.indiv):
             estados.append(Estado(AlgEjemplo.crom, self.alum, self.prof, self.subj, self.rooms, self.horas))
 
@@ -48,37 +51,36 @@ class AlgEjemplo(OptimizadorAlgoritmo, ABC):
         for i in range(0, AlgEjemplo.generations):
             indice_hijos = math.ceil(AlgEjemplo.indiv / 2)
 
-            estados_h = self.gr.evaluate_hard(estados_c)
+            estados_h, AlgEjemplo.comprobacionH = self.gr.evaluate_hard(estados_c)
             # print_estados(estados_h)
-            if len(estados_h) < indice_hijos:
+            if AlgEjemplo.comprobacionH:
+                estados_s, AlgEjemplo.comprobacionF = self.gr.evaluate_soft(estados_h.copy())
+            else:
+                estados_s = estados_h.copy()
 
-                for n in range(len(estados_h)):
-                    nueva_generacion[n] = estados_h[n]
+            if AlgEjemplo.comprobacionH and AlgEjemplo.comprobacionF and len(estados_s) >= indice_hijos:
+                print("El resultado es optimo!!!")
+                return estados_h[0]
 
-                for n in range(len(estados_h), indice_hijos):
-                    nueva_generacion[n], k = estados_h[random.randint(0, len(estados_h) - 1)]. \
-                        cruzar(estados_h[random.randint(0, len(estados_h) - 1)])
-                    estados_h.append(k)
+            if len(estados_s) < indice_hijos:
+
+                for n in range(len(estados_s)):
+                    nueva_generacion[n] = estados_s[n]
+
+                for n in range(len(estados_s), indice_hijos):
+                    nueva_generacion[n], k = estados_s[random.randint(0, len(estados_s) - 1)]. \
+                        cruzar(estados_s[random.randint(0, len(estados_s) - 1)])
+                    estados_s.append(k)
             else:
                 for n in range(indice_hijos):
-                    nueva_generacion[n] = estados_h[n]
+                    nueva_generacion[n] = estados_s[n]
 
-            # print(nueva_generacion[0].evalHard)
-            for k in range(0, indice_hijos, 2):
-                nueva_generacion[indice_hijos], nueva_generacion[indice_hijos + 1] = estados_h[k].cruzar(
-                    estados_h[k + 1])
-                indice_hijos += 2
-
-            indice_hijos = math.ceil(AlgEjemplo.indiv / 2)
-            estados_s = self.gr.evaluate_soft(nueva_generacion)
-
-            for n in range(0, indice_hijos):
-                nueva_generacion[n] = estados_s[n]
-            mutaciones = random.randint(0, indice_hijos / 2)
+            mutaciones = random.randint(2, indice_hijos)
             for j in range(0, mutaciones):
-                nueva_generacion[random.randint(0, mutaciones)].mutar(self.alum, self.prof, self.subj, self.rooms,
+                nueva_generacion[random.randint(2, mutaciones)].mutar(self.alum, self.prof, self.subj, self.rooms,
                                                                       self.horas)
-            nueva_generacion.sort(reverse=True, key=lambda x: x.evalSoft)
+
+            # nueva_generacion.sort(reverse=True, key=lambda x: x.evalSoft)
             # print(nueva_generacion[0].evalSoft)
             for k in range(0, indice_hijos, 2):
                 nueva_generacion[indice_hijos], nueva_generacion[indice_hijos + 1] = estados_s[k].cruzar(
@@ -87,4 +89,5 @@ class AlgEjemplo(OptimizadorAlgoritmo, ABC):
 
             estados_c = nueva_generacion.copy()
 
+        print("No se ha podido llegar a un resultado optimo")
         return estados_c[0]

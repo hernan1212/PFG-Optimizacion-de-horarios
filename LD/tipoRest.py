@@ -34,7 +34,7 @@ class varP(enum.Enum):
     enumAula = "aula"
     enumAsignatura = "asignatura"
     enumAsigNombre = "asignatura.nombre"
-    enumMaxAula = "MaxAula"
+    enumMaxAula = "aula.ocupacion"
     enumAsigClases = "asignatura.numClases"
     enumProfAptitudes = "profesor.aptitudes"
     enumAlumAptitudes = "estudiante.clases"
@@ -64,6 +64,6 @@ class varP(enum.Enum):
             return varP.enumAlumAptitudes
         elif tipo == "profesor.aptitudes":
             return varP.enumProfAptitudes
-        elif tipo == "MaxAula":
+        elif tipo == "aula.ocupacion":
             return varP.enumMaxAula
         return tipo

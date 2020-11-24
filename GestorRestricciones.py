@@ -1,4 +1,5 @@
 import AlgEjemplo
+from LD.Estado import Estado
 from LD.Relacion import Relacion
 
 
@@ -6,9 +7,8 @@ class GestorRestricciones:
 
     def __init__(self, rest):
         self.constraints = rest
-        self.hardTotal = 0
-        self.hardEval = 5
-        self.softTotal = 0
+        self.hardEval = 0
+        self.softEval = 0
         self.basic_const = self._set_constraints(3)
         self.soft_const = self._set_constraints(2)
         self.hard_const = self._set_constraints(1)
@@ -16,28 +16,35 @@ class GestorRestricciones:
 
     def evaluate_hard(self, estados):
         for e in reversed(range(len(estados))):
-            estados[e].evalHard = 0
-            self.hardTotal = 0
-            for r in self.hard_const:
-                estados[e].comprobH(r)
-                self.hardTotal += len(estados[e].clases) * r.risk.value
-            if self.hardTotal-estados[e].evalHard > self.hardEval:
+            estados[e].evalHard = Estado.evalTotalH.copy()
+            for r in range(len(self.hard_const)):
+                estados[e].comprobH(self.hard_const[r], r)
+            if (sum(estados[e].evalHard) > self.hardEval) and (len(estados) > 2):
                 estados.pop(e)
-        estados.sort(reverse=True, key=lambda x: x.evalHard)
-        if self.hardTotal-estados[0].evalHard < self.hardEval:
-            self.hardEval = self.hardTotal-estados[0].evalHard
+        estados.sort(key=lambda x: sum(x.evalHard))
+        if sum(estados[0].evalHard) < self.hardEval:
+            self.hardEval = sum(estados[0].evalHard)
+        print(sum(estados[0].evalHard))
+        print("Tam: " + str(len(estados)))
+        if self.hardEval == 0:
+            return estados, True
 
-        return estados
+        return estados, False
 
     def evaluate_soft(self, estados):
-        for e in estados:
-            e.evalSoft = 0
-            self.softTotal = 0
-            for r in self.soft_const:
-                e.comprobS(r)
-                self.softTotal += len(e.clases) * r.risk.value
-        estados.sort(reverse=True, key=lambda x: x.evalSoft)
-        return estados
+        for e in reversed(range(len(estados))):
+            estados[e].evalSoft = Estado.evalTotalS.copy()
+            for r in range(len(self.soft_const)):
+                estados[e].comprobS(self.soft_const[r], r)
+                if (sum(estados[e].evalSoft) < self.softEval) and (len(estados) > 2):
+                    estados.pop(e)
+        estados.sort(reverse=True, key=lambda x: sum(x.evalSoft))
+        print(sum(estados[0].evalSoft))
+        print("Tam: " + str(len(estados)))
+        if sum(estados[0].evalSoft) > self.softEval:
+            self.softEval = sum(estados[0].evalSoft)
+            return estados, False
+        return estados, True
 
     def _set_constraints(self, cont):
         list1 = []
@@ -49,3 +56,12 @@ class GestorRestricciones:
     def _set_basic_param(self):
         for i in self.basic_const:
             exec(" ".join(i.cont_b))
+
+    def set_evaluations(self, crom):
+        Estado.evalTotalH = [0 for x in range(len(self.hard_const))]
+        for e in range(len(Estado.evalTotalH)):
+            Estado.evalTotalH[e] = self.hard_const[e].risk.value * crom
+        self.hardEval = sum(Estado.evalTotalH)/2
+        Estado.evalTotalS = [0 for x in range(len(self.soft_const))]
+        self.softEval = 0
+

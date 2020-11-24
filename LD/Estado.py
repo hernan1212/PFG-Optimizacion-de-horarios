@@ -8,11 +8,13 @@ from LD.tipoRest import varP
 class Estado:
 
     repet = []
+    evalTotalH = []
+    evalTotalS = []
 
     def __init__(self, indiv=0, alumnos=[], profesores=[], asignaturas=[], aulas=[], horas=[]):
         self.clases = []
-        self.evalHard = 0
-        self.evalSoft = 0
+        self.evalHard = []
+        self.evalSoft = []
         for i in range(0, indiv):
             self.clases.append(Relacion(alumnos, profesores, asignaturas, aulas, horas))
 
@@ -49,7 +51,12 @@ class Estado:
         for c in self.clases:
             print("Clase" + str(cont) + ": " + str(c))
             cont += 1
-        print("Evaluation: " + str(self.evalHard))
+        print("Evaluation Hard: ")
+        for r in range(len(self.evalHard)):
+            print("Rest " + str(r+1) + ": " + str(self.evalHard[r]))
+        print("Evaluation Soft: ")
+        for r in range(len(self.evalSoft)):
+            print("Rest " + str(r+1) + ": " + str(self.evalSoft[r]))
 
     def getevaluation(self):
         evaluation = 0
@@ -58,7 +65,7 @@ class Estado:
     def effect(self, action):
         pass
 
-    def comprobH(self, rest):
+    def comprobH(self, rest, rnum):
         cont_a = [0 for x in rest.cont]
         cont_b = [0 for x in rest.cont]
         for i in self.clases:
@@ -70,13 +77,12 @@ class Estado:
                 else:
                     cont_b[j] = str(rest.cont[j])
             if eval(" ".join(cont_b)):
-                self.evalHard += 1
+                self.evalHard[rnum] -= rest.risk.value
         Estado.repet = []
 
-    def comprobS(self, rest):
+    def comprobS(self, rest, rnum):
         cont_a = [0 for x in rest.cont]
         cont_b = [0 for x in rest.cont]
-        self.evalSoft = 0
         for i in self.clases:
             for j in range(len(rest.cont)):
                 if isinstance(rest.cont[j], varP):
@@ -85,17 +91,29 @@ class Estado:
                     cont_b[j] = nameof(cont_a) + "[" + str(j) + "]"
                 else:
                     cont_b[j] = str(rest.cont[j])
-            a = exec(" ".join(cont_b))
+            self.evalSoft[rnum] += eval(" ".join(cont_b))
         Estado.repet = []
 
 
 def repetitions2(var1, var2):
-    id1 = hash(var1) + hash(var2)
+    id1 = id(var1) + id(var2)
     Estado.repet.append(id1)
     return Estado.repet.count(id1)
 
 
 def repetitions3(var1, var2, var3):
-    id1 = hash(var1) + hash(var2) + hash(var3)
+    id1 = id(var1) + id(var2) + id(var3)
     Estado.repet.append(id1)
     return Estado.repet.count(id1)
+
+
+def repetitions3s(var1, var2, var3):
+    id1 = id(var1) + id(var2) + id(var3)
+    if Estado.repet.count(id1) == 1:
+        return 1
+    Estado.repet.append(id1)
+    return 0
+
+
+
+
