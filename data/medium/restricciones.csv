@@ -1,0 +1,13 @@
+nombre,tipo,importancia,contenido
+1,3,1,"Relacion.DiasMax = 2"
+2,3,1,"Relacion.HorasMax = 4"
+3,1,3,"asignatura.nombre in profesor.aptitudes"
+4,1,3,"asignatura.nombre in estudiante.clases"
+5,1,2,"repetitions2( estudiante , hora ) < 2"
+6,1,2,"repetitions3( profesor , estudiante , hora ) < 2"
+7,1,1,"repetitions3( asignatura , estudiante , hora ) < 2"
+8,1,2,"repetitions3( aula , estudiante , hora ) < 2"
+9,1,3,"repetitions2( asignatura , estudiante ) <= asignatura.numClases"
+10,1,2,"aula.ocupacion >= repetitions2( aula , hora )"
+11,1,2,"repetitions3( aula , profesor , hora ) == repetitions3( profesor , asignatura , hora ) == repetitions2( aula , hora )"
+12,2,2,"repetitions3s( asignatura , aula , hora )"
