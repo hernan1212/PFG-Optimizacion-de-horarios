@@ -6,8 +6,8 @@ from LD.Hora import Hora
 class GestorProblema:
 
     @staticmethod
-    def optimize(problem, rest):
-        problem.strategy = AlgEjemplo(rest)
+    def optimize(problem, rest, logs):
+        problem.strategy = AlgEjemplo(rest, logs)
 
         horas = []
         for i in range(Relacion.DiasMax):

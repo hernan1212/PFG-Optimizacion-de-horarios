@@ -12,15 +12,16 @@ def print_estados(estados):
 
 
 class AlgEjemplo(OptimizadorAlgoritmo, ABC):
-    indiv = 200
+    indiv = 100
     crom = 0
-    generations = 40
+    generations = 200
     comprobacionH = False
     comprobacionF = False
 
-    def __init__(self, rest):
+    def __init__(self, rest, logs):
         super().__init__(rest)
-        self.gr = GestorRestricciones(rest)
+        self.gr = GestorRestricciones(rest, logs)
+        self.logs = logs
         self.alum = []
         self.prof = []
         self.subj = []
@@ -37,7 +38,10 @@ class AlgEjemplo(OptimizadorAlgoritmo, ABC):
 
         estados = []
         for i in alumnos:
-            AlgEjemplo.crom += len(i.clases)
+            for j in i.clases:
+                for k in asignaturas:
+                    if k.nombre == j:
+                        AlgEjemplo.crom += k.numClases
         self.gr.set_evaluations(AlgEjemplo.crom)
         for i in range(0, AlgEjemplo.indiv):
             estados.append(Estado(AlgEjemplo.crom, self.alum, self.prof, self.subj, self.rooms, self.horas))
@@ -49,6 +53,7 @@ class AlgEjemplo(OptimizadorAlgoritmo, ABC):
         nueva_generacion = [0 for x in range(0, len(estados_c))]
 
         for i in range(0, AlgEjemplo.generations):
+            if self.logs: print("Iteracion numero " + str(i+1))
             indice_hijos = math.ceil(AlgEjemplo.indiv / 2)
 
             estados_h, AlgEjemplo.comprobacionH = self.gr.evaluate_hard(estados_c)
@@ -75,9 +80,9 @@ class AlgEjemplo(OptimizadorAlgoritmo, ABC):
                 for n in range(indice_hijos):
                     nueva_generacion[n] = estados_s[n]
 
-            mutaciones = random.randint(2, indice_hijos)
-            for j in range(0, mutaciones):
-                nueva_generacion[random.randint(2, mutaciones)].mutar(self.alum, self.prof, self.subj, self.rooms,
+            mutaciones = random.randint(0, indice_hijos)
+            for j in range(mutaciones):
+                nueva_generacion[random.randint(1, indice_hijos-1)].mutar(self.alum, self.prof, self.subj, self.rooms,
                                                                       self.horas)
 
             # nueva_generacion.sort(reverse=True, key=lambda x: x.evalSoft)

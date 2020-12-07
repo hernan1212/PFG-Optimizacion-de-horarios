@@ -1,58 +1,56 @@
 #!/usr/bin/python3
-
 # from math import *
 # from sklearn import tree
 # import matplotlib.pyplot as plt
 from GestorProblema import GestorProblema
 from csvReader import csvReader
 from LD.Problem import Problem
+import sys
+import argparse
+import time
 
-nameProblem = "Basic"
-nameRestricciones = "Normal"
+nameProblem = "Algoritmo de optimizacion de planificacion de recursos."
+nameAlgoritmo = "Algoritmo genetico"
+possibilities = ["easy", "medium", "hard", "very_hard", "exec"]
+logs = True
 
-testType1 = "data/easy"
-testType2 = "data/medium"
-testType3 = "data/hard"
-prob1 = Problem()
-prob2 = Problem()
-prob3 = Problem()
-c = csvReader()
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--information", help="Mostrar información del programa", action="store_true")
+parser.add_argument("-q", "--quiet", help="No mostrar logs", action="store_true")
+parser.add_argument("-f", "--file", help="Grupo de ficheros a procesar: easy, medium, hard o exec")
+args = parser.parse_args()
 
-Alumnos = c.readstudents(testType1 + "/alumnos.csv")
-Profesores = c.readprofessors(testType1 + "/profesores.csv")
-Asignaturas = c.readsubjects(testType1 + "/asignaturas.csv")
-Aulas = c.readaulas(testType1 + "/aulas.csv")
+if args.information:
+    print("Nombre del problema: " + nameProblem)
+    print("Algoritmo utilizado: " + nameAlgoritmo)
 
-prob1.students = Alumnos
-prob1.professors = Profesores
-prob1.subjects = Asignaturas
-prob1.rooms = Aulas
+if args.file and args.file in possibilities:
+    testType = "data/" + args.file
+else:
+    print("No se ha introducido un nombre de archivo.")
+    print("Los nombres permitidos son:   easy    medium  hard   very_hard   exec")
+    sys.exit()
 
-Alumnos = c.readstudents(testType2 + "/alumnos.csv")
-Profesores = c.readprofessors(testType2 + "/profesores.csv")
-Asignaturas = c.readsubjects(testType2 + "/asignaturas.csv")
-Aulas = c.readaulas(testType2 + "/aulas.csv")
+if args.quiet:
+    logs = False
 
-prob2.students = Alumnos
-prob2.professors = Profesores
-prob2.subjects = Asignaturas
-prob2.rooms = Aulas
+prob = Problem()
+c = csvReader(logs)
+start_time = time.time()
 
-Alumnos = c.readstudents(testType3 + "/alumnos.csv")
-Profesores = c.readprofessors(testType3 + "/profesores.csv")
-Asignaturas = c.readsubjects(testType3 + "/asignaturas.csv")
-Aulas = c.readaulas(testType3 + "/aulas.csv")
-Restricciones = c.readrestricciones(testType1 + "/restricciones.csv")
+Alumnos = c.readstudents(testType + "/alumnos.csv")
+Profesores = c.readprofessors(testType + "/profesores.csv")
+Asignaturas = c.readsubjects(testType + "/asignaturas.csv")
+Aulas = c.readaulas(testType + "/aulas.csv")
+Restricciones = c.readrestricciones(testType + "/restricciones.csv")
 
-prob3.students = Alumnos
-prob3.professors = Profesores
-prob3.subjects = Asignaturas
-prob3.rooms = Aulas
+prob.students = Alumnos
+prob.professors = Profesores
+prob.subjects = Asignaturas
+prob.rooms = Aulas
 
-GestorProblema.optimize(prob1, Restricciones)
-GestorProblema.optimize(prob3, Restricciones)
-GestorProblema.optimize(prob2, Restricciones)
+GestorProblema.optimize(prob, Restricciones, logs)
 
-prob1.result.print_result()
-prob2.result.print_result()
-prob3.result.print_result()
+prob.result.print_result()
+
+print("El tiempo de ejecución ha sido: " + str(time.time() - start_time))

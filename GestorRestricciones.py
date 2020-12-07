@@ -5,13 +5,14 @@ from LD.Relacion import Relacion
 
 class GestorRestricciones:
 
-    def __init__(self, rest):
+    def __init__(self, rest, logs):
         self.constraints = rest
         self.hardEval = 0
         self.softEval = 0
         self.basic_const = self._set_constraints(3)
         self.soft_const = self._set_constraints(2)
         self.hard_const = self._set_constraints(1)
+        self.logs = logs
         self._set_basic_param()
 
     def evaluate_hard(self, estados):
@@ -24,8 +25,8 @@ class GestorRestricciones:
         estados.sort(key=lambda x: sum(x.evalHard))
         if sum(estados[0].evalHard) < self.hardEval:
             self.hardEval = sum(estados[0].evalHard)
-        print(sum(estados[0].evalHard))
-        print("Tam: " + str(len(estados)))
+        if self.logs: print("Mejor evaluación restricciones duras: " + str(sum(estados[0].evalHard)))
+        if self.logs: print("Numero de individuos que lo cumplen: " + str(len(estados)))
         if self.hardEval == 0:
             return estados, True
 
@@ -39,8 +40,8 @@ class GestorRestricciones:
                 if (sum(estados[e].evalSoft) < self.softEval) and (len(estados) > 2):
                     estados.pop(e)
         estados.sort(reverse=True, key=lambda x: sum(x.evalSoft))
-        print(sum(estados[0].evalSoft))
-        print("Tam: " + str(len(estados)))
+        if self.logs: print("Mejor evaluación restricciones suaves: " + str(sum(estados[0].evalSoft)))
+        if self.logs: print("Numero de individuos que lo cumplen: " + str(len(estados)))
         if sum(estados[0].evalSoft) > self.softEval:
             self.softEval = sum(estados[0].evalSoft)
             return estados, False
