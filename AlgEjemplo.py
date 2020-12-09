@@ -80,9 +80,9 @@ class AlgEjemplo(OptimizadorAlgoritmo, ABC):
                 for n in range(indice_hijos):
                     nueva_generacion[n] = estados_s[n]
 
-            mutaciones = random.randint(0, indice_hijos)
+            mutaciones = random.randint(0, indice_hijos*2)
             for j in range(mutaciones):
-                nueva_generacion[random.randint(1, indice_hijos-1)].mutar(self.alum, self.prof, self.subj, self.rooms,
+                nueva_generacion[random.randint(2, indice_hijos-1)].mutar(self.alum, self.prof, self.subj, self.rooms,
                                                                       self.horas)
 
             # nueva_generacion.sort(reverse=True, key=lambda x: x.evalSoft)

@@ -34,10 +34,10 @@ class Estado:
     def evalSoft(self, evalSoft):
         self._evalSoft = evalSoft
 
-    def __hash__(self):
+    def getid(self):
         a = 0
         for b in self.clases:
-            a += hash(b)
+            a += b.getid()
         return a
 
     def mutar(self, alumnos, profesores, asignaturas, aulas, horas):

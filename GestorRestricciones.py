@@ -17,17 +17,18 @@ class GestorRestricciones:
         self._set_basic_param()
 
     def evaluate_hard(self, estados):
-        repes = list()
+        self.repes = list()
         for e in reversed(range(len(estados))):
             estados[e].evalHard = Estado.evalTotalH.copy()
             for r in range(len(self.hard_const)):
                 estados[e].comprobH(self.hard_const[r], r)
             if (sum(estados[e].evalHard) > self.hardEval) and (len(estados) > 2):
                 estados.pop(e)
-            elif hash(estados[e]) in self.repes and len(estados) > 2:
+            elif (estados[e].getid() in self.repes) and (len(estados) > 6):
                 estados.pop(e)
             else:
-                repes.append(hash(estados[e]))
+                self.repes.append(estados[e].getid())
+
         estados.sort(key=lambda x: sum(x.evalHard))
         if sum(estados[0].evalHard) < self.hardEval:
             self.hardEval = sum(estados[0].evalHard)
