@@ -12,7 +12,7 @@ def print_estados(estados):
 
 
 class AlgEjemplo(OptimizadorAlgoritmo, ABC):
-    indiv = 100
+    indiv = 200
     crom = 0
     generations = 200
     comprobacionH = False

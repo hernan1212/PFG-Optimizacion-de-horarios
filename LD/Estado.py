@@ -34,6 +34,12 @@ class Estado:
     def evalSoft(self, evalSoft):
         self._evalSoft = evalSoft
 
+    def __hash__(self):
+        a = 0
+        for b in self.clases:
+            a += hash(b)
+        return a
+
     def mutar(self, alumnos, profesores, asignaturas, aulas, horas):
         ind_mutado = randint(0, len(self.clases)-1)
         self.clases[ind_mutado] = Relacion(alumnos, profesores, asignaturas, aulas, horas)

@@ -19,3 +19,6 @@ class Relacion:
 
     def get_var(self, var):
         return attrgetter(var)
+
+    def __hash__(self):
+        return hash(self.profesor) + hash(self.estudiante) + hash(self.asignatura) + hash(self.aula) + hash(self.hora)
