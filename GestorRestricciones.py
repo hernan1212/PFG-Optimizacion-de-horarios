@@ -19,12 +19,14 @@ class GestorRestricciones:
     def evaluate_hard(self, estados):
         self.repes = list()
         for e in reversed(range(len(estados))):
+            for i in range(len(estados[e].clasesOK)):
+                estados[e].clasesOK[i]=0
             estados[e].evalHard = Estado.evalTotalH.copy()
             for r in range(len(self.hard_const)):
                 estados[e].comprobH(self.hard_const[r], r)
             if (sum(estados[e].evalHard) > self.hardEval) and (len(estados) > 2):
                 estados.pop(e)
-            elif (estados[e].getid() in self.repes) and (len(estados) > 6):
+            elif estados[e].getid() in self.repes:
                 estados.pop(e)
             else:
                 self.repes.append(estados[e].getid())

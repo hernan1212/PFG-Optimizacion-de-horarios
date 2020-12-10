@@ -14,7 +14,7 @@ def print_estados(estados):
 class AlgEjemplo(OptimizadorAlgoritmo, ABC):
     indiv = 200
     crom = 0
-    generations = 200
+    generations = 60
     comprobacionH = False
     comprobacionF = False
 
@@ -63,7 +63,7 @@ class AlgEjemplo(OptimizadorAlgoritmo, ABC):
             else:
                 estados_s = estados_h.copy()
 
-            if AlgEjemplo.comprobacionH and AlgEjemplo.comprobacionF and len(estados_s) >= indice_hijos:
+            if AlgEjemplo.comprobacionH and AlgEjemplo.comprobacionF:
                 print("El resultado es optimo!!!")
                 return estados_h[0]
 
@@ -71,18 +71,24 @@ class AlgEjemplo(OptimizadorAlgoritmo, ABC):
 
                 for n in range(len(estados_s)):
                     nueva_generacion[n] = estados_s[n]
-
+                lest = len(estados_s) - 1
                 for n in range(len(estados_s), indice_hijos):
-                    nueva_generacion[n], k = estados_s[random.randint(0, len(estados_s) - 1)]. \
-                        cruzar(estados_s[random.randint(0, len(estados_s) - 1)])
+                    nueva_generacion[n] = Estado()
+                    k = Estado()
+                    r1 = random.randint(0, lest)
+                    r2 = random.randint(0, lest)
+                    nueva_generacion[n].clases = estados_s[r1].clases.copy()
+                    nueva_generacion[n].clasesOK = estados_s[r1].clasesOK.copy()
+                    k.clases = estados_s[r2].clases.copy()
+                    k.clasesOK = estados_s[r2].clasesOK.copy()
                     estados_s.append(k)
             else:
                 for n in range(indice_hijos):
                     nueva_generacion[n] = estados_s[n]
 
-            mutaciones = random.randint(0, indice_hijos*2)
+            mutaciones = random.randint(0, indice_hijos*3)
             for j in range(mutaciones):
-                nueva_generacion[random.randint(2, indice_hijos-1)].mutar(self.alum, self.prof, self.subj, self.rooms,
+                nueva_generacion[random.randint(1, indice_hijos-1)].mutar(self.alum, self.prof, self.subj, self.rooms,
                                                                       self.horas)
 
             # nueva_generacion.sort(reverse=True, key=lambda x: x.evalSoft)
